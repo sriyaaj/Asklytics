@@ -1,0 +1,87 @@
+/**
+ * DataSense AI - Multi-Page Executive PDF Report Print Styles
+ * 
+ * Activated automatically when user clicks [Generate PDF Report] (window.print())
+ */
+
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #111827 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Hide app navigation and interactive controls */
+  .app-navbar,
+  .ask-data-wrapper,
+  .tabs-container,
+  .upload-dropzone,
+  .quick-sample-selector,
+  .undo-redo-group,
+  .sug-actions,
+  .btn,
+  .modal-backdrop,
+  .shortcut-badge {
+    display: none !important;
+  }
+
+  .main-content {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure all report sections are visible for PDF export */
+  .tab-pane {
+    display: block !important;
+    page-break-after: always;
+  }
+
+  .print-header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+  }
+
+  .print-header h1 {
+    font-size: 22pt;
+    color: #111827;
+  }
+
+  .card, .kpi-card, .health-card, .quality-card, .chart-card, .suggestion-card, .rec-card {
+    background: #FFFFFF !important;
+    border: 1px solid #E5E7EB !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    margin-bottom: 16px;
+  }
+
+  .kpi-value, .health-score-val, .sim-big-val {
+    color: #111827 !important;
+    -webkit-text-fill-color: initial !important;
+  }
+
+  .data-table th {
+    background: #F3F4F6 !important;
+    color: #111827 !important;
+  }
+
+  .data-table td {
+    color: #374151 !important;
+    border-color: #E5E7EB !important;
+  }
+
+  .badge {
+    border: 1px solid #9CA3AF !important;
+    color: #111827 !important;
+    background: #F3F4F6 !important;
+  }
+
+  .math-proof-box {
+    background: #F9FAFB !important;
+    color: #111827 !important;
+    border: 1px solid #E5E7EB !important;
+  }
+}

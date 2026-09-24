@@ -1,0 +1,28 @@
+Date,Product,Region,Revenue,Cost,Quantity,Returns,Customer,Email,Phone,Sales Channel
+2026-06-01,Electronics,Chennai,₹125000,95000,45,2,Rahul Sharma,rahul.s@outlook.com,9840112233,Online
+2026-06-05,Product A,Bangalore,INR 140000,98000,60,3,Ananya Roy,ananya.r@gmail.com,9840198765,Retail
+2026-06-10,Product B,chennai,Rs.98000,72000,35,9,Vikram Seth,vikram.seth@yahoo.com,9820011223,Online
+2026-06-15,Electronics,Mumbai,210000,160000,70,5,Sneha Patel,sneha.p@gmail.com,9811122334,Online
+2026-06-18,Product A,Delhi,₹185000,135000,65,4,Amit Verma,amit.v@gmail.com,9877712345,Retail
+2026-06-22,Home Appliances,CHENNAI,115000,88000,28,1,Priya Kumar,priya@gmail.com,9876543210,Retail
+2026-06-22,Home Appliances,Chennai,115000,88000,28,1,Priya Kumar,priya@gmail.com,9876543210,Retail
+2026-06-25,Product B,Bangalore,85000,62000,30,8,Kavita Rao,kavita.rao@gmail.com,9845012345,Online
+2026-06-28,Electronics,Mumbai,195000,148000,62,4,Rohan Das,rohan.das@gmail.com,9898012345,Online
+2026-07-02,Product A,Chennai,240000,170000,82,3,Priya K,priya@gmail.com,9876543210,Retail
+2026-07-05,Product B,Delhi,₹110000,82000,40,11,Karan Johar,karan.j@gmail.com,9871122334,Online
+2026-07-09,Electronics,CHENNAI,₹260000,195000,88,6,Deepak Nair,deepak.n@gmail.com,9847012345,Online
+2026-07-12,Home Appliances,Bangalore,Rs.130000,98000,32,2,Meera Iyer,meera.i@gmail.com,9880012345,Retail
+2026-07-16,Product A,Mumbai,₹225000,165000,75,4,Rajesh Gupta,rajesh.g@gmail.com,9821012345,Retail
+2026-07-20,Electronics,Delhi,180000,135000,58,4,Pooja Hegde,pooja.h@gmail.com,9819012345,Online
+2026-07-24,Product B,Chennai,₹95000,70000,34,9,Siddharth M,siddharth.m@gmail.com,9840234567,Online
+2026-07-28,Home Appliances,Mumbai,145000,110000,36,3,Farhan Akhtar,farhan.a@gmail.com,9820345678,Retail
+2026-08-02,Product A,Bangalore,₹190000,140000,66,2,Nisha Pillai,nisha.p@gmail.com,9845123456,Retail
+2026-08-05,Product B,chennai,Rs.102000,76000,38,10,Vikram Seth,vikram.seth@yahoo.com,9820011223,Online
+2026-08-08,Electronics,Mumbai,₹175000,130000,56,5,Sneha Patel,sneha.p@gmail.com,9811122334,Online
+2026-08-11,Home Appliances,Delhi,,105000,35,2,Sunil Grover,sunil.g@gmail.com,9811234567,Retail
+12/08/2026,Product A,Chennai,₹97500,72000,36,2,Arjun Reddy,arjun.r@gmail.com,9840345678,Retail
+2026-08-14,Electronics,Chennai,₹342000,240000,110,6,Aditya Roy,aditya.roy@gmail.com,9840456789,Online
+Aug 16, 2026,Product B,Mumbai,₹108000,81000,39,10,Tanvi Shah,tanvi.s@gmail.com,9820456789,Online
+2026-08-20,Product A,Delhi,₹165000,122000,58,3,Manish Paul,manish.p@gmail.com,9871234567,Retail
+2026-08-24,Home Appliances,Bangalore,128000,96000,31,1,Alok Nath,alok.n@gmail.com,9880123456,Retail
+2026-08-28,Electronics,Delhi,192000,144000,60,4,Neha Kakkar,neha.k@gmail.com,9811345678,Online

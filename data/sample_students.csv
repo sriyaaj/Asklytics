@@ -1,0 +1,21 @@
+Student_ID,Student_Name,Grade,Subject,Term_1_Score,Term_2_Score,Attendance_Pct,Homework_Submissions
+STU-101,Aarav Patel,10th,Mathematics,88,92,96,18
+STU-102,Diya Sharma,10th,Mathematics,76,79,92,17
+STU-103,Ishaan Verma,10th,Statistics,38,34,74,9
+STU-104,Ananya Iyer,10th,Statistics,35,39,78,11
+STU-105,Kabir Sen,10th,Mathematics,92,96,98,20
+STU-106,Rhea Nair,10th,Statistics,42,36,70,8
+STU-107,Dev Malhotra,10th,Mathematics,82,61,84,14
+STU-108,Tara Pillai,10th,Statistics,65,41,80,12
+STU-109,Aditya Rao,10th,Mathematics,78,54,82,13
+STU-110,Meera Joshi,10th,Statistics,32,38,68,7
+STU-111,Vivaan Kapoor,10th,Mathematics,90,94,95,19
+STU-112,Saanvi Gupta,10th,Statistics,84,86,94,18
+STU-113,Aryan Ghosh,10th,Mathematics,55,58,80,13
+STU-114,Kiara Bhat,10th,Statistics,34,31,65,6
+STU-115,Rohan Das,10th,Mathematics,85,62,83,14
+STU-116,Pooja Hegde,10th,Statistics,39,37,72,10
+STU-117,Karan Mehra,10th,Mathematics,72,75,88,16
+STU-118,Tanvi Trivedi,10th,Statistics,88,90,96,19
+STU-119,Nikhil Roy,10th,Mathematics,68,70,85,15
+STU-120,Anika Jain,10th,Statistics,36,33,69,8
