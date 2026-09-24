@@ -7,7 +7,7 @@
   --bg-surface: #0E131F;
   --bg-surface-elevated: #141B2B;
   --bg-surface-hover: #1A2338;
-  
+
   --border-subtle: rgba(255, 255, 255, 0.07);
   --border-focus: rgba(99, 102, 241, 0.5);
   --border-hover: rgba(255, 255, 255, 0.14);
@@ -31,12 +31,14 @@
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 18px;
-  
+
   --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
   --shadow-glow: 0 0 24px -4px rgba(99, 102, 241, 0.25);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -140,7 +142,8 @@ body {
   transition: all 0.15s ease;
 }
 
-.btn-sample:hover, .btn-sample.active {
+.btn-sample:hover,
+.btn-sample.active {
   background: var(--bg-surface-hover);
   color: var(--text-main);
 }
@@ -339,7 +342,8 @@ body {
   margin-bottom: 24px;
 }
 
-.upload-dropzone:hover, .upload-dropzone.dragover {
+.upload-dropzone:hover,
+.upload-dropzone.dragover {
   border-color: var(--accent-primary);
   background: var(--bg-surface-elevated);
 }
@@ -618,9 +622,17 @@ body {
   font-weight: 700;
 }
 
-.q-icon.pass { color: var(--accent-emerald); }
-.q-icon.warn { color: var(--accent-amber); }
-.q-icon.info { color: var(--accent-cyan); }
+.q-icon.pass {
+  color: var(--accent-emerald);
+}
+
+.q-icon.warn {
+  color: var(--accent-amber);
+}
+
+.q-icon.info {
+  color: var(--accent-cyan);
+}
 
 /* ==========================================================================
    Feature 5: KPI Dashboard
@@ -727,7 +739,8 @@ body {
   margin-bottom: 24px;
 }
 
-.insights-list, .recs-list {
+.insights-list,
+.recs-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -937,6 +950,44 @@ body {
   color: var(--text-main);
 }
 
+.comp-upload-box {
+  border: 2px dashed var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  background: var(--bg-surface);
+}
+
+.comp-upload-box:hover {
+  border-color: var(--accent-primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.comp-upload-box.loaded {
+  border-color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.comp-upload-icon {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.comp-upload-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
+.comp-upload-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
 /* ==========================================================================
    Feature 15 & 16: Audience Reports & Methodology
    ========================================================================== */
@@ -959,7 +1010,8 @@ body {
   transition: all 0.15s ease;
 }
 
-.btn-audience:hover, .btn-audience.active {
+.btn-audience:hover,
+.btn-audience.active {
   background: var(--bg-surface-elevated);
   border-color: var(--accent-primary);
   color: var(--text-main);
@@ -1181,10 +1233,25 @@ body {
   letter-spacing: 0.02em;
 }
 
-.badge-indigo { background: rgba(99, 102, 241, 0.2); color: #818CF8; }
-.badge-emerald { background: rgba(16, 185, 129, 0.2); color: #34D399; }
-.badge-amber { background: rgba(245, 158, 11, 0.2); color: #FBBF24; }
-.badge-rose { background: rgba(244, 63, 94, 0.2); color: #FB7185; }
+.badge-indigo {
+  background: rgba(99, 102, 241, 0.2);
+  color: #818CF8;
+}
+
+.badge-emerald {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+}
+
+.badge-amber {
+  background: rgba(245, 158, 11, 0.2);
+  color: #FBBF24;
+}
+
+.badge-rose {
+  background: rgba(244, 63, 94, 0.2);
+  color: #FB7185;
+}
 
 /* Buttons */
 .btn {
@@ -1227,31 +1294,66 @@ body {
 }
 
 /* Utilities */
-.text-rose { color: var(--accent-rose); }
-.text-emerald { color: var(--accent-emerald); }
-.text-amber { color: var(--accent-amber); }
-.text-white { color: #FFF; }
+.text-rose {
+  color: var(--accent-rose);
+}
+
+.text-emerald {
+  color: var(--accent-emerald);
+}
+
+.text-amber {
+  color: var(--accent-amber);
+}
+
+.text-white {
+  color: #FFF;
+}
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-  .health-quality-split, .charts-grid, .insights-recs-split, .simulator-layout {
+
+  .health-quality-split,
+  .charts-grid,
+  .insights-recs-split,
+  .simulator-layout {
     grid-template-columns: 1fr;
   }
+
   .app-navbar {
     flex-direction: column;
     gap: 12px;

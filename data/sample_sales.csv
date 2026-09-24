@@ -22,7 +22,7 @@ Date,Product,Region,Revenue,Cost,Quantity,Returns,Customer,Email,Phone,Sales Cha
 2026-08-11,Home Appliances,Delhi,,105000,35,2,Sunil Grover,sunil.g@gmail.com,9811234567,Retail
 12/08/2026,Product A,Chennai,₹97500,72000,36,2,Arjun Reddy,arjun.r@gmail.com,9840345678,Retail
 2026-08-14,Electronics,Chennai,₹342000,240000,110,6,Aditya Roy,aditya.roy@gmail.com,9840456789,Online
-Aug 16, 2026,Product B,Mumbai,₹108000,81000,39,10,Tanvi Shah,tanvi.s@gmail.com,9820456789,Online
+2026-08-16,Product B,Mumbai,₹108000,81000,39,10,Tanvi Shah,tanvi.s@gmail.com,9820456789,Online
 2026-08-20,Product A,Delhi,₹165000,122000,58,3,Manish Paul,manish.p@gmail.com,9871234567,Retail
 2026-08-24,Home Appliances,Bangalore,128000,96000,31,1,Alok Nath,alok.n@gmail.com,9880123456,Retail
 2026-08-28,Electronics,Delhi,192000,144000,60,4,Neha Kakkar,neha.k@gmail.com,9811345678,Online
