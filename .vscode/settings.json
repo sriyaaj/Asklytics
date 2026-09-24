@@ -1,0 +1,9 @@
+{
+  "liveServer.settings.port": 8080,
+  "liveServer.settings.root": "/",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.associations": {
+    "*.csv": "csv"
+  }
+}
