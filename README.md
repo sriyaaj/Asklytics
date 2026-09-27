@@ -1,4 +1,4 @@
-#  asklytics 
+#  DatasenseAi 
 
 > **An AI-powered data analyst that cleans, analyzes, explains, compares, simulates, and reports data in plain English.**
 
