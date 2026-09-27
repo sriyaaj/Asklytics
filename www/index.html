@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataSense AI - Autonomous Data Analyst & Quality Engine</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+
+  <!-- Chart.js & PapaParse -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+
+<body>
+
+  <!-- App Navbar -->
+  <header class="app-navbar">
+    <div class="brand-section">
+      <div class="brand-logo">DS</div>
+      <div class="brand-title-group">
+        <h1>DataSense AI</h1>
+        <div class="brand-principle">Python calculates. <strong>AI explains.</strong> The user decides.</div>
+      </div>
+    </div>
+
+    <!-- Quick sample datasets & Global Actions -->
+    <div class="nav-actions">
+      <div class="quick-sample-selector">
+        <span class="quick-sample-label">Sample Data:</span>
+        <button class="btn-sample active" data-sample="sales">Sales & Revenue</button>
+        <button class="btn-sample" data-sample="students">Students</button>
+        <button class="btn-sample" data-sample="customers">Customers</button>
+      </div>
+
+      <button id="btn-groq-config" class="btn btn-outline btn-sm">
+        <span id="groq-status-dot"
+          style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#10B981;margin-right:4px;"></span>
+        Groq API
+      </button>
+
+      <button id="btn-export-pdf" class="btn btn-primary btn-sm">
+        Generate Report (PDF)
+      </button>
+    </div>
+  </header>
+
+  <!-- Feature 8: Notion/Linear Ask Your Data Question Bar -->
+  <section class="ask-data-wrapper">
+    <div class="ask-data-box">
+      <span class="search-icon">🔎</span>
+      <input type="text" id="ask-input" class="ask-input"
+        placeholder="Ask anything about your data... (e.g. Which product has highest profit? Show students below 40)">
+      <span class="shortcut-badge">/</span>
+      <button id="btn-ask-submit" class="btn-ask-submit">Ask</button>
+    </div>
+
+    <!-- Dynamic Query Results -->
+    <div id="query-result-panel" class="query-result-card hidden">
+      <div class="query-result-header">
+        <span class="badge badge-indigo" id="query-badge">AI Response</span>
+        <button class="btn-icon" id="close-query-panel">&times;</button>
+      </div>
+      <div class="query-answer-text" id="query-answer-text"></div>
+      <div class="query-actions-row">
+        <button class="btn btn-sm btn-outline" id="btn-query-evidence">View Evidence</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Linear Style Tabs -->
+  <nav class="tabs-container">
+    <button class="tab-btn active" data-tab="tab-overview">1. Data Preview</button>
+    <button class="tab-btn" data-tab="tab-cleaning">
+      2. AI Cleaning & Resolution <span class="tab-badge" id="cleaning-badge">0</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-health">3 & 4. Health & Quality</button>
+    <button class="tab-btn" data-tab="tab-dashboard">5 & 6. KPIs & Charts</button>
+    <button class="tab-btn" data-tab="tab-insights">7 & 10. Insights & Actions</button>
+    <button class="tab-btn" data-tab="tab-anomalies">11. Anomalies <span class="tab-badge"
+        id="anomaly-badge">0</span></button>
+    <button class="tab-btn" data-tab="tab-simulator">12. Scenario Simulator</button>
+    <button class="tab-btn" data-tab="tab-comparison">13 & 14. Report Comparison</button>
+    <button class="tab-btn" data-tab="tab-reports">15. Audience Reports</button>
+    <button class="tab-btn" data-tab="tab-methodology">16. Methodology</button>
+  </nav>
+
+  <!-- Main Content Areas -->
+  <main class="main-content">
+
+    <!-- TAB 1: CSV Upload & Data Preview -->
+    <section id="tab-overview" class="tab-pane active">
+      <div class="upload-dropzone" id="dropzone">
+        <div class="dropzone-icon">📁</div>
+        <div class="dropzone-title">Upload your CSV dataset</div>
+        <div class="dropzone-sub">Drag & drop your CSV file here, or browse from your computer</div>
+        <input type="file" id="file-input" accept=".csv" style="display: none;">
+        <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">Choose CSV</button>
+      </div>
+
+      <div class="meta-summary-bar">
+        <div>
+          <h3 id="meta-filename" style="font-size:15px;font-weight:600;">sales_data.csv</h3>
+          <div id="meta-domain-tag" style="font-size:12px;color:var(--text-muted);">Domain: Sales & Financial Metrics
+          </div>
+        </div>
+        <div class="meta-stats">
+          <div class="meta-stat-item">
+            <span class="meta-stat-label">Total Records</span>
+            <span class="meta-stat-val" id="meta-records">0</span>
+          </div>
+          <div class="meta-stat-item">
+            <span class="meta-stat-label">Columns</span>
+            <span class="meta-stat-val" id="meta-columns">0</span>
+          </div>
+          <div class="meta-stat-item">
+            <span class="meta-stat-label">Clean Status</span>
+            <span class="meta-stat-val text-emerald" id="meta-clean-status">Raw Unprocessed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Table (First 10 Rows) -->
+      <div class="table-container">
+        <table class="data-table" id="preview-table">
+          <thead id="preview-thead"></thead>
+          <tbody id="preview-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 2: AI-Assisted Cleaning & Resolution -->
+    <section id="tab-cleaning" class="tab-pane">
+      <div class="cleaning-header-row">
+        <div>
+          <h2 style="font-size:18px;font-weight:600;">AI-Assisted Cleaning & Resolution</h2>
+          <p style="color:var(--text-muted);font-size:13px;margin-top:2px;">
+            Workflow: <strong>Detect → Explain → Suggest → User Approves → Apply</strong>. Zero automatic deletes.
+          </p>
+        </div>
+        <div class="undo-redo-group">
+          <button id="btn-undo" class="btn btn-sm btn-outline">↩ Undo</button>
+          <button id="btn-redo" class="btn btn-sm btn-outline">↪ Redo</button>
+          <button id="btn-apply-all-clean" class="btn btn-sm btn-primary">Apply All Suggestions</button>
+        </div>
+      </div>
+
+      <div class="cleaning-grid" id="cleaning-suggestions-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 3: Data Quality Check & Health Score -->
+    <section id="tab-health" class="tab-pane">
+      <div class="health-quality-split">
+        <!-- Health Score Card -->
+        <div class="health-card" id="health-card-trigger">
+          <span class="badge badge-indigo">DATA HEALTH SCORE</span>
+          <div class="health-score-val" id="health-score-number">86</div>
+          <div style="font-size:12px;color:var(--text-muted);">Deterministic Rule Calculation</div>
+
+          <div class="health-submetrics">
+            <div class="health-bar-row">
+              <span>Completeness</span>
+              <div class="bar-track">
+                <div class="bar-fill" id="bar-completeness" style="width: 92%;"></div>
+              </div>
+              <span id="val-completeness">92%</span>
+            </div>
+            <div class="health-bar-row">
+              <span>Consistency</span>
+              <div class="bar-track">
+                <div class="bar-fill" id="bar-consistency" style="width: 88%;"></div>
+              </div>
+              <span id="val-consistency">88%</span>
+            </div>
+            <div class="health-bar-row">
+              <span>Validity</span>
+              <div class="bar-track">
+                <div class="bar-fill" id="bar-validity" style="width: 90%;"></div>
+              </div>
+              <span id="val-validity">90%</span>
+            </div>
+            <div class="health-bar-row">
+              <span>Duplicates</span>
+              <div class="bar-track">
+                <div class="bar-fill" id="bar-duplicates" style="width: 98%;"></div>
+              </div>
+              <span id="val-duplicates">98%</span>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline" style="margin-top:16px;width:100%;">View Score Calculation</button>
+        </div>
+
+        <!-- Quality Checklist Card -->
+        <div class="quality-card">
+          <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;">Data Quality Audit</h3>
+          <p style="font-size:12.5px;color:var(--text-muted);">Can you trust this dataset enough to analyze it?</p>
+          <div class="quality-grid" id="quality-checklist-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Column-by-Column Quality Matrix Table -->
+      <div style="margin-top:24px;background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <div>
+            <h3 style="font-size:15px;font-weight:600;">Column-by-Column Health & Quality Breakdown</h3>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">Granular assessment of data completeness, cardinality, value ranges, and type consistency across every field.</p>
+          </div>
+          <span class="badge badge-indigo" id="health-cols-badge">All Attributes Audited</span>
+        </div>
+        <div class="table-container" style="margin-top:0;">
+          <table class="data-table" id="column-health-table">
+            <thead>
+              <tr>
+                <th>Column Name</th>
+                <th>Inferred Type</th>
+                <th>Completeness</th>
+                <th>Distinct Values</th>
+                <th>Format Consistency</th>
+                <th>Value Range / Top Value</th>
+                <th>Health Grade</th>
+              </tr>
+            </thead>
+            <tbody id="column-health-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Automatic KPI Dashboard & Intelligent Charts -->
+    <section id="tab-dashboard" class="tab-pane">
+      <!-- Domain Adaptive KPIs -->
+      <div class="kpi-grid" id="kpi-cards-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Intelligent Visualizations -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">Primary Time Trend</h4>
+            <span class="badge badge-indigo">Temporal Series</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-trend"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">Category Breakdown</h4>
+            <span class="badge badge-emerald">Category Comparison</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-breakdown"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">Distribution Analysis</h4>
+            <span class="badge badge-amber">Share / Spread</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-distribution"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title">Bivariate Scatter Correlation</h4>
+            <span class="badge badge-rose">Correlation</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-scatter"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: AI Insights & Action Recommendations -->
+    <section id="tab-insights" class="tab-pane">
+      <div class="insights-recs-split">
+        <div>
+          <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">Plain-English AI Insights</h3>
+          <div class="insights-list" id="insights-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">Action Recommendation Engine</h3>
+          <div class="recs-list" id="recs-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: Anomaly Detection -->
+    <section id="tab-anomalies" class="tab-pane">
+      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">Statistical Anomaly Detection</h3>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">
+        Actively monitors for statistical deviations exceeding 2.5 standard deviations (Z-score & IQR boundaries).
+      </p>
+      <div class="anomalies-list" id="anomalies-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 7: Scenario Simulator -->
+    <section id="tab-simulator" class="tab-pane">
+      <div class="simulator-layout">
+        <div class="simulator-controls-card">
+          <h3 style="font-size:16px;font-weight:600;margin-bottom:6px;">Scenario Simulator</h3>
+          <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:20px;">
+            Test assumptions and evaluate what-if business situations with transparent formula recalculations.
+          </p>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Price Adjustment</span>
+              <span class="slider-val-badge" id="sim-val-price">+5%</span>
+            </div>
+            <input type="range" id="sim-slider-price" class="range-slider" min="-30" max="30" value="5" step="1">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Volume / Quantity Change</span>
+              <span class="slider-val-badge" id="sim-val-qty">-2%</span>
+            </div>
+            <input type="range" id="sim-slider-qty" class="range-slider" min="-30" max="30" value="-2" step="1">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <span>Return Rate Reduction</span>
+              <span class="slider-val-badge" id="sim-val-returns">-10%</span>
+            </div>
+            <input type="range" id="sim-slider-returns" class="range-slider" min="0" max="50" value="10" step="5">
+          </div>
+
+          <button id="btn-run-simulation" class="btn btn-primary" style="width:100%;margin-top:10px;">Run
+            Simulation</button>
+        </div>
+
+        <div class="simulator-results-card">
+          <div>
+            <div class="sim-metric-callout">
+              <span class="sim-metric-label">Estimated Revenue</span>
+              <div class="sim-big-val" id="sim-est-revenue">₹10,29,000</div>
+              <span class="sim-delta-badge pos" id="sim-est-delta">+₹29,000 (+2.9%)</span>
+            </div>
+
+            <div class="sim-metric-callout">
+              <span class="sim-metric-label">Estimated Recovered Returns</span>
+              <div class="sim-big-val" id="sim-est-returns" style="font-size:24px;">₹12,000</div>
+            </div>
+
+            <div id="sim-consideration-text"
+              style="font-size:13px;color:var(--text-muted);background:var(--bg-surface);padding:12px;border-radius:var(--radius-sm);margin-bottom:12px;">
+              Potential consideration: A higher price could affect demand.
+            </div>
+
+            <div id="sim-math-breakdown"
+              style="font-size:12px;color:var(--text-main);background:var(--bg-surface);padding:14px;border-radius:var(--radius-sm);margin-bottom:12px;border-left:3px solid var(--accent-primary);line-height:1.7;">
+              <!-- Real detailed mathematical steps rendered inline -->
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;color:var(--text-dim);margin-bottom:10px;">
+              ⓘ This is a what-if estimate, not a guaranteed prediction.
+            </div>
+            <button id="btn-show-sim-calc" class="btn btn-sm btn-outline">Show Modal Proof</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 8: Report Comparison -->
+    <section id="tab-comparison" class="tab-pane">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <h3 style="font-size:16px;font-weight:600;">Report Comparison</h3>
+          <p style="color:var(--text-muted);font-size:13px;">Compare two distinct CSV datasets side-by-side or split the
+            active dataset across temporal cycles.</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-sm btn-outline active" id="btn-comp-periods">Compare Periods (Auto-Split)</button>
+          <button class="btn btn-sm btn-outline" id="btn-comp-files">Compare Two CSV Files</button>
+        </div>
+      </div>
+
+      <!-- Two-file upload section (hidden by default) -->
+      <div id="comp-file-upload-row" style="display:none;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;">
+          <div id="comp-upload-a" class="comp-upload-box"
+            onclick="document.getElementById('comp-file-input-a').click()">
+            <input type="file" id="comp-file-input-a" accept=".csv" style="display:none">
+            <div class="comp-upload-icon">📁</div>
+            <div class="comp-upload-label" id="comp-label-upload-a">Dataset A (First CSV)</div>
+            <div class="comp-upload-hint">Click or drag CSV here</div>
+          </div>
+
+          <div style="font-size:18px;font-weight:700;color:var(--accent-primary);text-align:center;">VS</div>
+
+          <div id="comp-upload-b" class="comp-upload-box"
+            onclick="document.getElementById('comp-file-input-b').click()">
+            <input type="file" id="comp-file-input-b" accept=".csv" style="display:none">
+            <div class="comp-upload-icon">📁</div>
+            <div class="comp-upload-label" id="comp-label-upload-b">Dataset B (Second CSV)</div>
+            <div class="comp-upload-hint">Click or drag CSV here</div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:14px;">
+          <button class="btn btn-primary" id="btn-run-file-comparison" disabled>Run Comparison</button>
+          <p style="color:var(--text-dim);font-size:12px;margin-top:6px;">Upload both CSV datasets above, then click Run
+            Comparison to generate delta analysis.</p>
+        </div>
+      </div>
+
+      <div class="comparison-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th id="comp-label-a">Period 1</th>
+              <th id="comp-label-b">Period 2</th>
+              <th>Absolute Delta</th>
+              <th>% Shift</th>
+              <th>Action / Evidence</th>
+            </tr>
+          </thead>
+          <tbody id="comp-tbody">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+
+        <div class="comparison-narrative-box" id="comp-narrative">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 9: Audience-Based Reports -->
+    <section id="tab-reports" class="tab-pane">
+      <h3 style="font-size:16px;font-weight:600;margin-bottom:6px;">Audience-Based Report Generator</h3>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">
+        Same data, specialized presentation tailored for your stakeholder.
+      </p>
+
+      <div class="audience-selector-row">
+        <button class="btn-audience active" data-audience="Executive">Executive</button>
+        <button class="btn-audience" data-audience="Analyst">Analyst</button>
+        <button class="btn-audience" data-audience="Teacher">Teacher</button>
+        <button class="btn-audience" data-audience="Sales Manager">Sales Manager</button>
+        <button class="btn-audience" data-audience="General User">General User</button>
+      </div>
+
+      <div class="report-preview-box" id="audience-report-content">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 10: Methodology & AI Transparency -->
+    <section id="tab-methodology" class="tab-pane">
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:6px;">How DataSense AI Works</h3>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px;">
+        Architectural transparency: The AI is not responsible for guessing the truth. It is strictly responsible for
+        communicating verified results.
+      </p>
+
+      <div class="pipeline-diagram">
+        <div class="pipe-step">
+          <div class="pipe-step-name">1. Raw Data</div>
+          <div class="pipe-step-sub">User CSV file</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">2. Data Cleaning</div>
+          <div class="pipe-step-sub">Fuzzy dupes & format</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">3. User Approval</div>
+          <div class="pipe-step-sub">Full control & Undo</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">4. Deterministic Math</div>
+          <div class="pipe-step-sub">Formulas & stats</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">5. Groq LLM</div>
+          <div class="pipe-step-sub">Plain English & QA</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-step">
+          <div class="pipe-step-name">6. User Decision</div>
+          <div class="pipe-step-sub">Verified insights</div>
+        </div>
+      </div>
+
+      <div
+        style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:24px;margin-top:20px;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:10px;">AI Limitations & Truth Boundaries</h4>
+        <ul style="color:var(--text-muted);font-size:13px;line-height:1.8;padding-left:18px;">
+          <li><strong>Zero Hallucinated Numbers</strong>: The Groq LLM receives pre-calculated numerical facts and is
+            strictly instructed never to fabricate calculations.</li>
+          <li><strong>Correlation ≠ Causation</strong>: Statistical associations observed across dimensions do not
+            necessarily imply causal relationships.</li>
+          <li><strong>Scenario Estimates</strong>: What-if calculations are based on user assumptions and mathematical
+            sensitivities, not speculative fortune-telling.</li>
+          <li><strong>Explicit Insufficient Data Safeguard</strong>: When asked queries without supporting dimensions
+            (e.g., dropout risk without historical targets), the system explicitly refuses with an Insufficient Data
+            notice.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Health Score Modal -->
+  <div id="health-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:15px;font-weight:600;">Data Health Score Breakdown</h3>
+        <button class="btn-icon" id="close-health-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">
+          The Data Health Score is calculated deterministically via defined rules without arbitrary LLM guessing:
+        </p>
+        <div class="math-proof-box">
+          Score = (Completeness × 0.30)
+          + (Consistency × 0.25)
+          + (Validity × 0.25)
+          + (Duplicates × 0.20)
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;margin-top:12px;">
+          <div style="display:flex;justify-content:space-between;"><span>Completeness (Non-null ratio):</span> <strong
+              id="modal-h-comp">92%</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Consistency (Uniform types):</span> <strong
+              id="modal-h-cons">88%</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Validity (Valid boundaries):</span> <strong
+              id="modal-h-val">90%</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Duplicates (Uniqueness):</span> <strong
+              id="modal-h-dupe">98%</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Groq API Key Modal -->
+  <div id="groq-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:15px;font-weight:600;">Groq API Configuration</h3>
+        <button class="btn-icon" id="close-groq-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:14px;">
+          Provide your Groq API key for real-time streaming and inference with <code>llama-3.3-70b-versatile</code>.
+          Key is stored safely in your browser's <code>localStorage</code>.
+        </p>
+        <div style="margin-bottom:14px;">
+          <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;">GROQ API KEY</label>
+          <input type="password" id="groq-api-key-input" class="ask-input"
+            style="width:100%;border:1px solid var(--border-subtle);background:var(--bg-surface);padding:8px 12px;border-radius:var(--radius-sm);"
+            placeholder="gsk_...">
+        </div>
+        <div style="margin-bottom:20px;">
+          <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;">MODEL SELECTION</label>
+          <select id="groq-model-select" class="ask-input"
+            style="width:100%;border:1px solid var(--border-subtle);background:var(--bg-surface);padding:8px 12px;border-radius:var(--radius-sm);color:var(--text-main);">
+            <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Recommended)</option>
+            <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (Ultra Fast)</option>
+            <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+          </select>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button id="btn-clear-groq-key" class="btn btn-outline btn-sm">Clear Key</button>
+          <button id="btn-save-groq-key" class="btn btn-primary btn-sm">Save Key</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Script (Standalone Bundle - works on file:// and http://) -->
+  <script src="js/app.bundle.js"></script>
+</body>
+
+</html>

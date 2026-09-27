@@ -1,0 +1,13 @@
+Customer_ID,Name,Segment,Tenure_Months,Monthly_Spend,Support_Tickets,Churn_Status,Last_Login_Days
+CUST-001,Amitabh Sengupta,Enterprise,24,₹18500,2,Active,2
+CUST-002,Bhavna Mittal,SMB,8,₹4200,6,Churned,45
+CUST-003,Chirag Pandya,Startup,14,₹6800,1,Active,4
+CUST-004,Divya Menon,SMB,5,Rs.3500,7,Churned,60
+CUST-005,Eshwar Kulkarni,Enterprise,36,₹24000,0,Active,1
+CUST-006,Fatima Sheikh,Startup,3,₹2900,5,Churned,38
+CUST-007,Girish Chandra,SMB,18,7800,3,Active,6
+CUST-008,Hema Malini,Enterprise,28,₹21500,1,Active,3
+CUST-009,Inderjeet Singh,Startup,9,4900,4,Churned,52
+CUST-010,Juhi Chawla,SMB,16,6400,2,Active,8
+CUST-011,Kailash Kher,Enterprise,32,₹26000,1,Active,1
+CUST-012,Lata Mangeshkar,SMB,22,8900,3,Active,5

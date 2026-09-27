@@ -788,7 +788,7 @@ class DataSenseApp {
     this.state.lastSimulation = result;
 
     document.getElementById('sim-est-revenue').textContent = `₹${result.simulatedRevenue.toLocaleString('en-IN')}`;
-    
+
     const deltaBadge = document.getElementById('sim-est-delta');
     const isPos = result.revenueDiff >= 0;
     deltaBadge.textContent = `${isPos ? '+' : '-'}₹${Math.abs(result.revenueDiff).toLocaleString('en-IN')} (${result.revenueDiffPct}%)`;

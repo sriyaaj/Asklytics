@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Datasense-AI</string>
+    <string name="title_activity_main">Datasense-AI</string>
+    <string name="package_name">com.sriya.datasenseai</string>
+    <string name="custom_url_scheme">com.sriya.datasenseai</string>
+</resources>
